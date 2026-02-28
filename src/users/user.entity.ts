@@ -1,11 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { AfterInsert, Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn() //auto generated id 
     id:number;
+
     @Column()
     email:string;
+
     @Column()
     password:string;
+
+    
 }

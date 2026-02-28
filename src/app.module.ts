@@ -10,10 +10,10 @@ import { Report } from './reports/reports.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
-    type: 'sqlite',
-    database: 'db.sqlite',
-    entities: [User, Report],
-    synchronize: true
+    type: 'sqlite', //type of db
+    database: 'db.sqlite', //db name
+    entities: [User, Report], //entities of the db
+    synchronize: true //for migration only for dev not for prod 
   }), UsersModule, ReportsModule],
   controllers: [AppController],
   providers: [AppService],
