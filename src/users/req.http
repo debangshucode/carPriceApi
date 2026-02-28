@@ -5,3 +5,22 @@ Content-Type: application/json
     "email": "abc@email.com",
     "password":"wdwd"
 }
+
+### find a perticuler user with id 
+
+GET http://localhost:3000/auth/32
+
+###find all user of a given email
+
+GET http://localhost:3000/auth?email=abc1@email.com
+
+### Delete 1 user with id 
+DELETE http://localhost:3000/auth/1
+
+### update user 
+PATCH http://localhost:3000/auth/2
+Content-Type: application/json
+
+{
+    "email": "abc5@email.com"
+}
