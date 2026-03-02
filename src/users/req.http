@@ -2,33 +2,45 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-    "email": "abc@email.com",
-    "password":"wdwd"
+  "email": "abc2323@email.com",
+  "password": "wdwd"
 }
+
+
 ### user sign in
 POST http://localhost:3000/auth/signin
 Content-Type: application/json
 
 {
-    "email": "abc@email.com",
-    "password":"wdwd"
+  "email": "abc2323@email.com",
+  "password": "wdwd"
 }
 
-### find a perticuler user with id 
 
+### user signOut
+POST http://localhost:3000/auth/signout
+
+
+### current usr 
+GET http://localhost:3000/auth/curUser
+
+
+### find a perticuler user with id 
 GET http://localhost:3000/auth/2
 
-###find all user of a given email
 
+###find all user of a given email
 GET http://localhost:3000/auth?email=abc@email.com
+
 
 ### Delete 1 user with id 
 DELETE http://localhost:3000/auth/4
+
 
 ### update user 
 PATCH http://localhost:3000/auth/2
 Content-Type: application/json
 
 {
-    "email": "abc5@email.com"
+  "email": "abc5@email.com"
 }
