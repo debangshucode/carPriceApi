@@ -8,11 +8,11 @@ Content-Type: application/json
 
 ### find a perticuler user with id 
 
-GET http://localhost:3000/auth/32
+GET http://localhost:3000/auth/2
 
 ###find all user of a given email
 
-GET http://localhost:3000/auth?email=abc1@email.com
+GET http://localhost:3000/auth?email=abc5@email.com
 
 ### Delete 1 user with id 
 DELETE http://localhost:3000/auth/1
