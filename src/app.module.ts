@@ -18,4 +18,4 @@ import { Report } from './reports/reports.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
