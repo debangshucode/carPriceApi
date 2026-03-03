@@ -1,23 +1,28 @@
-import { Controller, Post, Body, Get, Patch, Delete, Param, Query, Session, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Patch, Delete, Param, Query, Session, NotFoundException,UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto'
 import { UsersService } from './users.service';
 import { updateUserDto } from './dtos/update-user.dto';
 import { serialize } from '../interceptors/serialize.interceptor'
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { User } from './user.entity';
+import {AuthGuard} from '../guards/auth.guard'
+
+
+
 
 @Controller('auth')
 @serialize(UserDto) //exclude password from response
+
 export class UsersController {
 
     constructor(private userService: UsersService, private authService: AuthService) { }
 
     @Get('/curUser')
-    async curUser(@Session() session:any) {
-        const user =  await this.userService.findOne(session.userId);
-        if(user===null){
-            throw new NotFoundException("no user logged in");
-        }
+    @UseGuards(AuthGuard)
+    async curUser(@CurrentUser() user:User) {
+        
         return user;
     }
 
