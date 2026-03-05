@@ -19,9 +19,9 @@ async function bootstrap() {
   SwaggerModule.setup('api',app,documentFactory);
 
   
-  app.use(cookieSession({
-    keys:['asdfghnh']
-  }))
+  // app.use(cookieSession({
+  //   keys:['asdfghnh']
+  // })) move to appModule
 
   // app.useGlobalPipes(
   //   new ValidationPipe({
