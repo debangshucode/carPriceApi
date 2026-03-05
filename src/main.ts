@@ -23,11 +23,11 @@ async function bootstrap() {
     keys:['asdfghnh']
   }))
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist:true, //remove extra properties autometicaly in requests 
-    }),
-  )
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist:true, //remove extra properties autometicaly in requests 
+  //   }),
+  // ) // its move to appmodule 
 
   await app.listen(process.env.PORT ?? 3000);
 }
