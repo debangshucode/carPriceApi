@@ -1,0 +1,208 @@
+NESTJS API FLOW NOTES (using this car-price-api project)
+=====================================================
+
+Goal
+----
+When starting a new API project, follow this fixed flow so you do not forget order.
+
+
+1) Big Picture Diagram
+----------------------
+Client Request
+  |
+  v
+main.ts (global setup: validation pipe, session, swagger)
+  |
+  v
+AppModule / Feature Module (wiring)
+  |
+  v
+Controller (route endpoint)
+  |
+  v
+Guard (optional: block unauthorized)
+  |
+  v
+Interceptor BEFORE (optional: prepare request, e.g. load current user)
+  |
+  v
+Service (business logic)
+  |
+  v
+Repository/Entity (DB read/write)
+  |
+  v
+Controller returns data
+  |
+  v
+Interceptor AFTER (optional: serialize/transform response)
+  |
+  v
+Client Response
+
+
+2) Practical Step-by-Step (new project)
+---------------------------------------
+1. Create project: nest new <project>
+2. Setup main.ts
+   - global ValidationPipe
+   - cookie/session or JWT setup
+   - swagger (optional)
+3. Setup DB connection in AppModule (TypeORM/Prisma)
+4. Create feature: module + controller + service
+5. Create entity/model (table schema)
+6. Register entity/repository in feature module
+7. Create DTOs for request validation
+8. Implement service methods (business rules)
+9. Implement controller routes and call service
+10. Add auth flow (signup/signin/signout)
+11. Add guard for protected routes
+12. Add interceptor(s)
+   - request side: attach useful data (current user)
+   - response side: format output (serialize DTO)
+13. Add tests (service/controller/e2e)
+14. Test endpoints (req.http/Postman)
+
+Memory line:
+Bootstrap -> DB -> Module -> DTO/Entity -> Service -> Controller -> Guard/Interceptor -> Tests
+
+
+3) Mapping To THIS Project
+--------------------------
+- main.ts: src/main.ts
+  - cookie session configured
+  - global ValidationPipe configured
+  - swagger configured
+
+- Users module wiring: src/users/users.module.ts
+  - imports TypeOrmModule.forFeature([User])
+  - registers UsersController
+  - registers UsersService + AuthService
+  - registers CurrentUserInterceptor globally via APP_INTERCEPTOR
+
+- Controller: src/users/users.controller.ts
+  - /auth/signup
+  - /auth/signin
+  - /auth/signout
+  - /auth/curUser (protected)
+
+- Services:
+  - src/users/auth.service.ts (signup/signin, hash/verify password)
+  - src/users/users.service.ts (DB operations)
+
+- Entity + DTO:
+  - src/users/user.entity.ts
+  - src/users/dtos/create-user.dto.ts
+
+- Auth helper pieces:
+  - Guard: src/guards/auth.guard.ts
+  - Interceptor: src/users/interceptors/current-user.intercepter.ts
+  - Custom decorator: src/users/decorators/current-user.decorator.ts
+  - Serialize interceptor: src/interceptors/serialize.interceptor.ts
+
+
+4) Easy Code Examples (from this project style)
+------------------------------------------------
+A) main.ts global setup idea
+
+app.use(cookieSession({ keys: ['asdfghnh'] }));
+app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+
+Meaning:
+- session data is available on request.session
+- extra request body fields are removed automatically
+
+
+B) Module wiring pattern
+
+@Module({
+  imports: [TypeOrmModule.forFeature([User])],
+  controllers: [UsersController],
+  providers: [UsersService, AuthService]
+})
+
+Meaning:
+- Controller can inject services
+- Services can inject User repository
+
+
+C) Guard pattern
+
+canActivate(context: ExecutionContext) {
+  const request = context.switchToHttp().getRequest();
+  return request.session.userId;
+}
+
+Meaning:
+- if no userId in session -> route blocked
+
+
+D) Current user interceptor pattern
+
+async intercept(context: ExecutionContext, handler: CallHandler) {
+  const request = context.switchToHttp().getRequest();
+  const { userId } = request.session || {};
+
+  if (userId) {
+    const user = await this.userService.findOne(userId);
+    request.CurrentUser = user;
+  }
+
+  return handler.handle();
+}
+
+Meaning:
+- BEFORE controller: loads user from DB and attaches to request
+- AFTER controller: no extra logic currently (could add .pipe(...))
+
+
+E) Custom decorator pattern
+
+export const CurrentUser = createParamDecorator((data, context) => {
+  const request = context.switchToHttp().getRequest();
+  return request.CurrentUser;
+});
+
+Controller usage:
+
+@Get('/curUser')
+@UseGuards(AuthGuard)
+async curUser(@CurrentUser() user: User) {
+  return user;
+}
+
+Meaning:
+- Guard ensures logged-in user exists
+- Decorator reads value already attached by interceptor
+
+
+F) Serialize interceptor usage
+
+@serialize(UserDto)
+@Controller('auth')
+export class UsersController {}
+
+Meaning:
+- response is transformed to UserDto shape
+- sensitive fields like password can be hidden
+
+
+5) Fast Revision Card (30 seconds)
+----------------------------------
+- Controller = receives request
+- Service = business logic
+- Entity/Repo = database
+- Guard = allow/block route
+- Interceptor = run before/after handler
+- Decorator = easy way to read data from request
+- DTO = validate incoming data + shape outgoing data
+
+
+6) Common Mistakes To Avoid
+---------------------------
+1. Putting business logic in controller (keep in service)
+2. Forgetting DTO validation
+3. Forgetting to register provider/import in module
+4. Using decorator without setting data in request first
+   (e.g. @CurrentUser needs CurrentUserInterceptor)
+5. Returning full entity with sensitive fields (use serialize/DTO)
