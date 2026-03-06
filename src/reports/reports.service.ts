@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Report } from './reports.entity';
 import { CreateReportDto } from './dtos/cretate-report.dto';
 import { User } from 'src/users/user.entity';
-import { UpdateReportDto } from './dtos/update-report.dto';
 
 @Injectable()
 export class ReportsService {
