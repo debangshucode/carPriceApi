@@ -1,0 +1,35 @@
+###create new report 
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+  "make": "BMW",
+  "model": "G36",
+  "price": 74000,
+  "year": 2007,
+  "lat": 0,
+  "lng": 0,
+  "milage": 10
+}
+
+
+### get all reports 
+GET http://localhost:3000/reports
+
+
+### get one report 
+GET http://localhost:3000/reports/3
+
+
+###update report to approve or reject
+PATCH http://localhost:3000/reports/3/approve
+
+
+###update report to change any value
+PATCH http://localhost:3000/reports/3
+Content-Type: application/json
+
+{
+  "price": 45000,
+  "milage": 10
+}

@@ -2,7 +2,8 @@ import {
     NestInterceptor,
     ExecutionContext,
     CallHandler,
-    Injectable
+    Injectable,
+    NotFoundException
 } from '@nestjs/common'
 import { UsersService } from '../users.service'
 import { Observable } from 'rxjs'
@@ -16,8 +17,17 @@ export class CurrentUserInterceptor implements NestInterceptor {
         const {userId} = request.session || {};
 
         if(userId){
-            const user = await this.userService.findOne(userId);
-            request.CurrentUser = user;
+            try {
+                const user = await this.userService.findOne(userId);
+                request.CurrentUser = user;
+            } catch (err) {
+                // Stale session id should not break unrelated endpoints (e.g. signup/signin).
+                if (err instanceof NotFoundException) {
+                    request.session.userId = null;
+                } else {
+                    throw err;
+                }
+            }
         }
         return handeler.handle();
     }

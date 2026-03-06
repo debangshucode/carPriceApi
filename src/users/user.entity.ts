@@ -1,5 +1,5 @@
-import { AfterInsert, AfterRemove, AfterUpdate, Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { AfterInsert, AfterRemove, AfterUpdate, Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Report } from "src/reports/reports.entity";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn() //auto generated id 
@@ -10,6 +10,9 @@ export class User {
 
     @Column()
     password: string;
+
+    @OneToMany(() => Report, (report) => report.user)
+    reports: Report[];
 
     @AfterInsert() //hooks 
     logInsert() {
@@ -23,4 +26,5 @@ export class User {
     logRemove() {
         console.log("Remove user with id ", this.id)
     }
+
 }
