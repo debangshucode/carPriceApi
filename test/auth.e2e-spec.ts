@@ -20,7 +20,7 @@ describe('Authentication system (e2e)', () => {
 
     it('Handels a signup request ', async () => {
         const Email = 'asddfghgfdcghf2d@example.com';
-        return request(app.getHttpServer())
+        return await request(app.getHttpServer())
             .post('/auth/signup')
             .send({
                 email: Email,
@@ -34,4 +34,26 @@ describe('Authentication system (e2e)', () => {
                 expect(email).toEqual(Email)
             })
     });
+
+    it('after signin returs the current user', async()=>{
+
+        const Email='qwfg@example.com';
+
+        const res = await request(app.getHttpServer()).post('/auth/signup')
+        .send({
+            email:Email,
+            password:"2344"
+        })
+        .expect(201)
+
+        const cookie:string[] = res.get('Set-Cookie') as string[];
+
+        const {body} = await request(app.getHttpServer())
+        .get('/auth/curUser')
+        .set('Cookie',cookie)
+        .expect(200)
+        
+
+        expect(body.email).toEqual(Email)
+    })
 });
