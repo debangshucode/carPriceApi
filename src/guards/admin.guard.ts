@@ -7,7 +7,6 @@ export class AdminGuard implements CanActivate{
         access the incoming request and perform authentication or authorization logic based on the
         request information. */
         const request = context.switchToHttp().getRequest();
-        console.log(request.currentUser)
         if(!request.currentUser){
             return false ;
         }
