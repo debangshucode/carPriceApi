@@ -17,7 +17,10 @@ export class UsersService {
         if (!id) {
             return null;
         }
-        const user = await this.repo.findOneBy({ id });
+        const user = await this.repo.findOne({
+            where: { id },
+            relations: ['reports'],
+        });
         if (!user) {
             throw new NotFoundException("user not found");
         }

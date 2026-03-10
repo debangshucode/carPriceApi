@@ -1,10 +1,16 @@
-import { Expose } from "class-transformer";
+import { Expose,Transform } from "class-transformer";
 
 
 export class UserDto {
     @Expose()
-    id:number;
+    id: number;
 
     @Expose()
-    email:string;
+    email: string;
+
+    @Expose()
+    admin: boolean;
+    @Expose()
+    @Transform(({ obj }) => obj.reports.map(x=>x.id))
+    reportsId: number[]
 }
