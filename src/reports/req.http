@@ -3,13 +3,13 @@ POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-  "make": "BMW",
-  "model": "G36",
-  "price": 74000,
-  "year": 2007,
-  "lat": 0,
-  "lng": 0,
-  "milage": 10
+  "make": "Ford",
+  "model": "Mustang",
+  "price": 54000,
+  "year": 2016,
+  "lat": 50,
+  "lng": 45,
+  "milage": 50000
 }
 
 
@@ -22,7 +22,7 @@ GET http://localhost:3000/reports/3
 
 
 ###update report to approve or reject
-PATCH http://localhost:3000/reports/4/approve
+PATCH http://localhost:3000/reports/8/approve
 
 
 ###update report to change any value
@@ -33,3 +33,6 @@ Content-Type: application/json
   "price": 45000,
   "milage": 10
 }
+
+### get estimate of a given car as a query 
+GET http://localhost:3000/reports?make=Ford&model=Mustang&year=2019&lat=40&lng=40&milage=5000

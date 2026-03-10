@@ -34,7 +34,7 @@ export class UpdateReportDto {
     @IsOptional()
     @IsNumber()
     @Min(5)
-    @Max(100)
+    @Max(100000)
     milage: number;
 
 }
