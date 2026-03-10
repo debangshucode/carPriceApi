@@ -22,7 +22,7 @@ GET http://localhost:3000/reports/3
 
 
 ###update report to approve or reject
-PATCH http://localhost:3000/reports/3/approve
+PATCH http://localhost:3000/reports/4/approve
 
 
 ###update report to change any value

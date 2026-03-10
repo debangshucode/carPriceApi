@@ -7,6 +7,10 @@ import { User } from 'src/users/user.entity';
 import { ReportDto } from './dtos/report.dto';
 import { serialize } from 'src/interceptors/serialize.interceptor';
 import { UpdateReportDto } from './dtos/update-report.dto';
+import { AdminGuard } from 'src/guards/admin.guard';
+
+
+
 @Controller('reports')
 export class ReportsController {
     constructor(private reportService: ReportsService) { }
@@ -25,11 +29,13 @@ export class ReportsController {
     }
 
     @Patch('/:id/approve')
+    @UseGuards(AdminGuard)
     approveReports(@Param('id') id:string){
         const report = this.reportService.approveReport(id,true);
         return report ;
     }
     @Patch('/:id/reject')
+    @UseGuards(AdminGuard)
     rejectReports(@Param('id') id:string){
         const report = this .reportService.approveReport(id,false);
         return report
