@@ -10,7 +10,8 @@ export class UserDto {
 
     @Expose()
     admin: boolean;
+
     @Expose()
-    @Transform(({ obj }) => obj.reports.map(x=>x.id))
+    @Transform(({ obj }) => obj.reports?.map((report) => report.id) ?? [])
     reportsId: number[]
 }

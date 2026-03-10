@@ -19,7 +19,7 @@ export class CurrentUserInterceptor implements NestInterceptor {
         if(userId){
             try {
                 const user = await this.userService.findOne(userId);
-                request.CurrentUser = user;
+                request.currentUser = user;
             } catch (err) {
                 // Stale session id should not break unrelated endpoints (e.g. signup/signin).
                 if (err instanceof NotFoundException) {
