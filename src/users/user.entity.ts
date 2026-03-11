@@ -1,5 +1,5 @@
 import { AfterInsert, AfterRemove, AfterUpdate, Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Report } from "src/reports/reports.entity";
+import { Report } from '../reports/reports.entity';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn() //auto generated id 

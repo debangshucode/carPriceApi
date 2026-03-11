@@ -9,6 +9,8 @@ import { User } from './users/user.entity';
 import { Report } from './reports/reports.entity';
 import cookieSession from 'cookie-session';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmConfigService } from './config/typeorm.config';
+
 
 @Module({
   imports: [
@@ -18,15 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
 
     TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          entities: [User, Report],
-          synchronize: true
-        }
-      }
+      useClass:TypeOrmConfigService,
     }),
 
     // TypeOrmModule.forRoot({
