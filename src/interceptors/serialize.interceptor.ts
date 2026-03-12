@@ -19,8 +19,9 @@ export function serialize(dto: ClassConstructor) {
 export class SerializeInterceptor implements NestInterceptor {
     constructor(private dto: any) { }
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-
+        // code here will run before controller/ route handeller 
         return next.handle().pipe(
+            //  code here will run after route handeller - to transform response data
             map((data) => {
                 return plainToClass(this.dto, data, {
                     excludeExtraneousValues: true
