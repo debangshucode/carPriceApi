@@ -5,6 +5,7 @@ import { Report } from './reports.entity';
 import { CreateReportDto } from './dtos/cretate-report.dto';
 import { User } from 'src/users/user.entity';
 import { GetEstimateDto } from './dtos/get-estimate.dto';
+import { paginate, PaginateQuery } from 'nestjs-paginate';
 
 @Injectable()
 export class ReportsService {
@@ -31,13 +32,17 @@ export class ReportsService {
         .getRawOne()
     }
 
-    getReports() {
-        const reports = this.repo.find({
-            relations: {
-                user: true,
-            }
-        })
-        return reports;
+    getReports(query: PaginateQuery) {
+        // const reports = this.repo.find({
+        //     relations: {
+        //         user: true,
+        //     }
+        // })
+        return paginate(query,this.repo, {
+            relations:['user'],
+            sortableColumns:['id'],
+            defaultSortBy:[['id','DESC']]
+        });
     }
     async findOne(id: string) {
         const report = await this.repo.findOne({ where: { id: parseInt(id) } })

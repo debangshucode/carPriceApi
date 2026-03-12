@@ -6,23 +6,23 @@ Content-Type: application/json
   "make": "Ford",
   "model": "Mustang",
   "price": 54000,
-  "year": 2016,
-  "lat": 50,
-  "lng": 45,
-  "milage": 50000
+  "year": 2018,
+  "lat": 40,
+  "lng": 40,
+  "milage": 5000
 }
 
 
 ### get all reports 
-GET http://localhost:3000/reports
+GET http://localhost:3000/reports/all-reports?page=1&limit=3&sortBy=id:DESC'
 
 
 ### get one report 
-GET http://localhost:3000/reports/3
+GET http://localhost:3000/reports/1
 
 
 ###update report to approve or reject
-PATCH http://localhost:3000/reports/8/approve
+PATCH http://localhost:3000/reports/5/approve
 
 
 ###update report to change any value

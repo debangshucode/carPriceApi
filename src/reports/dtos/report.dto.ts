@@ -29,6 +29,6 @@ export class ReportDto {
     approve:boolean
 
     @Expose()
-    @Transform(({obj})=>obj.user.id)
+    @Transform(({obj})=>obj.user?.id)
     UserId: number
 }

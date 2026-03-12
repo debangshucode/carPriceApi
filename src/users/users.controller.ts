@@ -56,11 +56,11 @@ export class UsersController {
         return this.userService.find(email)
     }
     @Patch('/:id')
-    updateUser(@Param('id') id: number, @Body() body: updateUserDto) {
-        return this.userService.update(id, body)
+    updateUser(@Param('id') id: string, @Body() body: updateUserDto) {
+        return this.userService.update(parseInt(id), body)
     }
     @Delete('/:id')
-    removeUser(@Param('id') id: number) {
-        return this.userService.remove(id)
+    removeUser(@Param('id') id: string) {
+        return this.userService.remove(parseInt(id))
     }
 }
