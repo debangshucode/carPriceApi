@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './user.entity';
+import { paginate, PaginateQuery } from 'nestjs-paginate';
 
 @Injectable()
 export class UsersService {
@@ -46,5 +47,11 @@ export class UsersService {
             throw new NotFoundException("user not found");
         }
         return this.repo.remove(user)
+    }
+
+    async findAll(query:PaginateQuery){
+        return paginate(query,this.repo,{
+            sortableColumns:['id']
+        })
     }
 }
