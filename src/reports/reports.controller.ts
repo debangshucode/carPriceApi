@@ -32,7 +32,6 @@ export class ReportsController {
     @Get('/all-reports')
     async getReports(@Paginate() query: PaginateQuery) {
         const result = await this.reportService.getReports(query);
-        console.log(result)
         return {
             ...result,
             data: plainToInstance(ReportDto, result.data, {
